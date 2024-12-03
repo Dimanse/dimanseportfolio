@@ -1,0 +1,36 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.imagen{
+    &__caricatura{
+        width: 30rem;
+    }
+}
+
+.descripcion{
+    background-color: v.$azul;
+    padding: 10rem 0;
+
+    
+    &__titulo{
+        @include m.nombre-pagina;
+        text-align: center;
+        color: v.$blanco;
+        // font-size: 2.3rem;
+        // @include m.tablet{
+        //     font-size: 4rem;
+        // }
+    }
+    &__contenedor{
+        @include m.contenedor-md;
+    }
+    &__texto{
+        @include m.descripcion-pagina;
+        color: v.$blanco;
+        text-align: center;
+        @include m.tablet{
+            font-size: 2.4rem;
+        }
+        
+    }
+}

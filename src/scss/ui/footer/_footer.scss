@@ -1,0 +1,53 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.footer{
+    background-color: v.$azul;
+    // margin-top: 5rem;
+    
+    color: v.$blanco;
+    &__grid{
+        @include m.contenedor;
+        padding: 10rem 0 5rem 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+         
+    }
+
+    &__contenido{
+        height: auto;
+    }
+
+    &__logo{
+        @include m.logo;
+        @include m.texto-fluido(2rem, 4rem);
+        margin: 0;
+    }
+
+    &__imagen{
+        width: 20rem;
+        margin: 0 auto;
+    }
+
+    &__texto{
+        line-height: 2rem;
+        text-align: center;
+        @include m.descripcion-pagina;
+        color: v.$blanco;
+        font-size: 2.4rem;
+    }
+
+    &__copyright{
+        background-color: darken(v.$azul, 10%);
+        margin: 3rem 0 0 0;
+        padding: 2rem 0;
+        font-size: 2rem;
+        font-weight: v.$black;
+        text-align: center;
+
+        &--regular{
+            font-weight: v.$regular;
+        }
+    }
+}

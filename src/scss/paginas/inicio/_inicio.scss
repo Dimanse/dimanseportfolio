@@ -1,0 +1,38 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.inicio{
+    padding-top: 4rem;
+    @include m.tablet{
+        padding-top: 8rem;
+    }
+}
+.imagen{
+    width: 30rem;
+    margin: 0 auto;
+    @include m.tablet{
+        width: 40rem;
+    }
+    
+    
+    &__caricatura{
+        // border-radius: 50%;
+      
+    }
+}
+
+.software{
+    
+    width: 37rem;
+    margin: 0 auto -5rem auto;
+    @include m.tablet{
+        width: 110rem;
+        margin: -5rem auto -14.3rem auto;
+    }
+
+    &__imagen{
+        // width: 30rem;
+        // margin: 0 auto;
+        
+    }
+}

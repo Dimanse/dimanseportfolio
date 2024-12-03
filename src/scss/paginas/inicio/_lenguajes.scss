@@ -1,0 +1,96 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.lenguajes{
+    border-radius: 2rem;
+    &__grid{
+        display: flex;
+        flex-direction: column;
+
+        
+
+        @include m.tablet{
+            flex-direction: row;
+            justify-content: space-between;
+            padding: 4rem 0;
+            
+        }
+    }
+}
+
+.fullstack{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin: 0 auto;
+    padding: 5rem 0;
+    @include m.tablet{
+        border-right: 2px solid v.$gris-claro;
+    &:last-of-type{
+        border-right: none;
+    }
+    }
+    
+
+    &__icono{
+        width: 6rem;
+        height: 6rem;
+        background-color: v.$secundario;
+        border-radius: 1rem;
+        padding: 1rem;
+        margin: 0 auto;
+    }
+
+    &__titulo{
+        text-align: center;
+        font-weight: v.$bold;
+        font-size: 2rem;
+        @include m.tablet{
+            font-size: 2.7rem;
+        }
+    }
+
+    &__descripcion{
+        @include m.tablet{
+            width: 75%;
+            margin:0 auto;
+        }
+        
+    }
+
+    &__domino{
+        text-align: center;
+        color: v.$morado;
+        font-size: 1.8rem;
+        @include m.tablet{
+            width: 75%;
+            margin:1rem auto;
+        }
+    }
+    &__herramientas{
+        text-align: center;
+        color: v.$morado;
+        font-size: 1.8rem;
+        @include m.tablet{
+            width: 75%;
+            margin:2rem auto;
+            
+        }
+    }
+    ul{
+        list-style: none;
+        text-align: center;
+        padding: 0;
+        
+        
+    }
+    li{
+        @include m.descripcion-pagina;
+        width: 75%;
+            margin:2rem auto;
+        @include m.tablet{
+            width: 75%;
+            margin:2rem auto;
+        }
+    }
+}

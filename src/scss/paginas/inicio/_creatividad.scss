@@ -1,0 +1,40 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.creatividad{
+    background-image: url(../img/creatividad.webp);
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 65rem;
+    margin-top: 8rem;
+    @include m.tablet{
+        background-position: center top;
+    }
+
+    &__contenedor{
+        color: v.$blanco;
+        padding-top: 35rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        @include m.tablet{
+            padding-top: 48rem;
+        }
+    }
+
+    &__heading{
+        @include m.nombre-pagina;
+        font-size: 3rem;
+        width: 85%;
+        margin: 0 auto;
+        text-align: center;
+        
+    }
+
+    &__enlace{
+        color: v.$blanco;
+       
+    }
+}

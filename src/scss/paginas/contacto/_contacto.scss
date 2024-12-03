@@ -1,0 +1,125 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.contenedor{
+    width: 15rem;
+    height: 15rem;
+    margin: 0 auto;
+    // display: flex;
+    
+    &__imagen{
+        width: 20rem;
+        height: 20rem;
+        margin: 0 auto; 
+        border: 1px solid v.$gris;
+        border-radius: 50%;
+        // box-shadow: .5rem .5rem v.$gris-claro;
+        
+    }
+}
+.icono{
+   
+    text-align: right;
+    margin:0 5rem 5rem 0;
+    @include m.tablet{
+        margin:0 10rem 5rem 0;
+    }
+    
+}
+
+.fa-solid,
+.fa-rotate-left{
+    color: v.$blanco;
+    font-size: 3rem;
+}
+
+.contacto{
+    padding: 15rem 0;
+    margin-top: -5rem;
+    border-radius: 2rem;
+    
+    &__heading{
+        @include m.nombre-pagina;
+        margin-bottom: 5rem;
+    }
+
+    &__formulario{
+        padding: 0 4rem;
+        @include m.tablet{
+            width: 65%;
+            margin: 0 auto;
+            padding: 0;
+        }
+    }
+
+    &__grid{
+        @include m.desktop{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            @include m.tablet{
+                gap: 2rem;
+            }
+        }
+    }
+
+    &__campo{
+        margin-top: 3rem;
+        flex: 1;
+       
+    }
+
+    label{
+        @include m.descripcion-pagina;
+        color: v.$gris;
+        font-size: 2rem;
+        display: block;
+        text-align: left;
+        margin-bottom: 1rem
+    }
+
+    &__input{
+        width: 100%;
+        border: 1px solid v.$gris-claro;
+        padding: 2rem;
+        border-radius: 1rem;
+        &::placeholder{
+            color: v.$gris-claro;
+        }
+    }
+
+    textarea{
+        border: 1px solid v.$gris-claro;
+        border-radius: 1rem;
+        padding: 2rem;
+        @include m.tablet{
+            width: 100%;
+        }
+    }
+
+    &__boton{
+        
+        width: 100%;
+        padding: 1.5rem 6rem;
+        border-radius: 4rem;
+        border: 2px solid v.$azul;
+        color: v.$azul;
+        font-size: 2rem;
+        // font-weight: v.$bold;
+        margin-top: 5rem;
+        transition-property: background-color, color;
+        transition-duration: 500ms;
+        background-color: transparent;
+
+        @include m.tablet{
+            display: block;
+            width: auto;
+            margin: 5rem auto 0 auto;
+
+        }
+        &:hover{
+            background-color: v.$azul;
+            color: v.$blanco;
+        }
+    }
+}

@@ -1,0 +1,1 @@
+@use 'base/variables' as v;@use 'base/mixins' as m;.creatividad{background-image:url(../img/creatividad.webp);background-position:center center;background-size:cover;background-repeat:no-repeat;min-height:80rem;margin-top:8rem}
