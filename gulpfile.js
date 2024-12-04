@@ -1,102 +1,79 @@
-const { src, dest, watch, parallel } = require('gulp');
+import path from 'path'
+import fs from 'fs'
+import { glob } from 'glob'
+import { src, dest, watch, series } from 'gulp'
+import * as dartSass from 'sass'
+import gulpSass from 'gulp-sass'
+import terser from 'gulp-terser'
+import sharp from 'sharp'
+import plumber from 'gulp-plumber';
 
-// CSS
-const sass = require('gulp-sass')(require('sass'));
-const plumber = require('gulp-plumber');
-const autoprefixer = require('autoprefixer');
-const cssnano = require('cssnano');
-const postcss = require('gulp-postcss');
-const sourcemaps = require('gulp-sourcemaps');
-
-// Imagenes
-const cache = require('gulp-cache');
-const imagemin = require('gulp-imagemin');
-const webp = require('gulp-webp');
-const avif = require('gulp-avif');
-
-// Javascript
-const terser = require('gulp-terser-js');
-const concat = require('gulp-concat');
-const rename = require('gulp-rename')
-// webpack
-const webpack = require('webpack-stream');
+const sass = gulpSass(dartSass)
 
 const paths = {
     scss: 'src/scss/**/*.scss',
-    js: 'src/js/**/*.js',
-    imagenes: 'src/img/**/*'
-}
-function css() {
-    return src(paths.scss)
-        .pipe( sourcemaps.init())
-        .pipe( sass({outputStyle: 'expanded'}))
-        // .pipe( postcss([autoprefixer(), cssnano()]))
-        .pipe( postcss([autoprefixer()]))
-        .pipe( sourcemaps.write('.'))
-        .pipe(  dest('public/build/css') );
-}
-function javascript() {
-    return src(paths.js)
-    .pipe( webpack({
-        module: {
-            rules: [
-                {
-                    test: /\.css$/i,
-                    use: ['style-loader', 'css-loader']
-                }
-            ]
-        },
-        mode: 'production',
-        watch: true,
-        entry: './src/js/app.js'
-    }))
-        .pipe(sourcemaps.init())
-        // .pipe(concat('bundle.js')) 
-        .pipe(terser())
-        .pipe(sourcemaps.write('.'))
-        .pipe(rename({ suffix: '.min' }))
-        .pipe(dest('./public/build/js'))
+    js: 'src/js/**/*.js'
 }
 
-function imagenes() {
-    return src(paths.imagenes)
-        .pipe( cache(imagemin({ optimizationLevel: 3})))
-        .pipe( dest('public/build/img'))
-}
-
-function versionWebp( done ) {
-    const opciones = {
-        quality: 50
-    };
-    src('src/img/**/*.{png,jpg}')
-        .pipe( webp(opciones) )
-        .pipe( dest('public/build/img') )
-    done();
-}
-
-function versionAvif( done ) {
-    const opciones = {
-        quality: 50
-    };
-    src('src/img/**/*.{png,jpg}')
-        .pipe( avif(opciones) )
-        .pipe( dest('public/build/img') )
-    done();
-}
-
-function dev(done) {
-    watch( paths.scss, css );
-    watch( paths.js, javascript );
-    watch( paths.imagenes, imagenes)
-    watch( paths.imagenes, versionWebp)
-    watch( paths.imagenes, versionAvif)
+export function css( done ) {
+    src(paths.scss, {sourcemaps: true})
+        .pipe(plumber())  // Añadir plumber para manejar errores
+        .pipe( sass({
+            outputStyle: 'compressed'
+        }).on('error', sass.logError) )
+        .pipe( dest('./public/build/css', {sourcemaps: '.'}) );
     done()
 }
 
-exports.css = css;
-exports.js = javascript;
-exports.imagenes = imagenes;
-exports.versionWebp = versionWebp;
-exports.versionAvif = versionAvif;
-exports.dev = parallel( css, imagenes, versionWebp, versionAvif, javascript, dev) ;
-exports.build = parallel( css, imagenes, versionWebp, javascript) ;
+export function js( done ) {
+    src(paths.js)
+      .pipe(plumber())  // Añadir plumber para manejar errores
+      .pipe(terser())
+      .pipe(dest('./public/build/js'))
+    done()
+}
+
+export async function imagenes(done) {
+    const srcDir = './src/img';
+    const buildDir = './public/build/img';
+    const images =  await glob('./src/img/**/*')
+
+    images.forEach(file => {
+        const relativePath = path.relative(srcDir, path.dirname(file));
+        const outputSubDir = path.join(buildDir, relativePath);
+        procesarImagenes(file, outputSubDir);
+    });
+    done();
+}
+
+function procesarImagenes(file, outputSubDir) {
+    if (!fs.existsSync(outputSubDir)) {
+        fs.mkdirSync(outputSubDir, { recursive: true })
+    }
+    const baseName = path.basename(file, path.extname(file))
+    const extName = path.extname(file)
+
+    if (extName.toLowerCase() === '.svg') {
+        // If it's an SVG file, move it to the output directory
+        const outputFile = path.join(outputSubDir, `${baseName}${extName}`);
+    fs.copyFileSync(file, outputFile);
+    } else {
+        // For other image formats, process them with sharp
+        const outputFile = path.join(outputSubDir, `${baseName}${extName}`);
+        const outputFileWebp = path.join(outputSubDir, `${baseName}.webp`);
+        const outputFileAvif = path.join(outputSubDir, `${baseName}.avif`);
+        const options = { quality: 80 };
+
+        sharp(file).jpeg(options).toFile(outputFile);
+        sharp(file).webp(options).toFile(outputFileWebp);
+        sharp(file).avif().toFile(outputFileAvif);
+    }
+}
+
+export function dev() {
+    watch( paths.scss, css );
+    watch( paths.js, js );
+    watch('src/img/**/*.{png,jpg}', imagenes)
+}
+
+export default series( js, css, imagenes, dev )

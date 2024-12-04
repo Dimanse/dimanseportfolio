@@ -9,11 +9,6 @@ use Controllers\APIPonentes;
 use Controllers\AuthController;
 use Controllers\EventosController;
 use Controllers\PaginasController;
-use Controllers\RegalosController;
-use Controllers\PonentesController;
-use Controllers\RegistroController;
-use Controllers\DashboardController;
-use Controllers\RegistradosController;
 
 $router = new Router();
 
